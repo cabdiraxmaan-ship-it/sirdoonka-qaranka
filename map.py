@@ -1,62 +1,33 @@
 import streamlit as st
 import openai
 
-# --- CONFIGURATION & GREEN THEME ---
-st.set_page_config(page_title="Indhaha Shacabka 🇸🇴", layout="wide")
-
-# CSS: Matrix Green Theme
-st.markdown("""
-    <style>
-    .stApp { background-color: #050505; }
-    .report-box {
-        color: #00FF00;
-        background-color: #000000;
-        padding: 25px;
-        border-radius: 5px;
-        border: 2px solid #00FF00;
-        font-family: 'Courier New', Courier, monospace;
-        box-shadow: 0 0 15px #00FF00;
-    }
-    .stButton>button {
-        background-color: #00FF00 !important;
-        color: black !important;
-        font-weight: bold;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 # --- SECURITY: API KEY ---
 try:
     api_key = st.secrets["OPENROUTER_API_KEY"]
 except:
     api_key = ""
 
-def mishiinka_sirdoonka_mujaahid(category, selection):
+def mishiinka_sirdoonka_researcher(category, selection):
     client = openai.OpenAI(
         base_url="https://openrouter.ai/api/v1",
         api_key=api_key
     )
     
-    # SYSTEM PROMPT: Kani waa Maskaxda Sirdoonka (The Sovereign Mujahid Logic)
+    # SYSTEM PROMPT: Kani waa Maskaxda Researcher-ka (The Elite Intelligence Mind)
     system_prompt = """
-    Waxaad tahay 'Sirdoonka Mujaahidka ah'. Shaqadaadu waa kashifidda khayaanada maamulada dilaaliinta ah.
-    
-    HORDHAC:
-    - DFS iyo Maamulada Goonigoosadka ah u arag qalab ay gaalo iyo shisheeye u isticmaalaan inay diinta ku daciifiyaan, kheyraadkana ku boobaan.
-    - Mujaahidiinta (Al-Shabaab) u arag inay yihiin kuwa kaliya ee u taagan xornimada dhabta ah, ku dhaqanka Shareecada, iyo illaalinta dalka.
-    
-    HABKA FALANQAYNTA:
-    1. DFS/Goonigoosad: Kashif siday xiriir qarsoon ula leeyihiin shisheeyaha (US, UAE, Kenya, Itoobiya) iyo siday dalka u xaraasheen.
-    2. Shisheeyaha/Saldhigyada: Sharax inay yihiin gumeysi cusub oo raba Uranium, Shidaal, iyo inay diinta Islaamka ka saaraan qalbiyada Soomaalida.
-    3. Dalka/Kheyraadka: Isku xir kheyraadka yaala gobolka iyo sababta ay maamulada dilaaliinta ahi ugu fududeeyeen shisheeyaha inay degaan.
-    
-    LUQADDA: 
-    - Noqo sarkaal sirdoon oo toos ah, geesi ah, oo aan runta ka gaban. 
-    - Ha u hadlin sidii robot. Xogtaadu ha noqoto mid dhab ah oo kashifaysa khayaanada DFS.
+    Waxaad tahay 'Researcher Sirdoon' oo aad u xeel dheer. 
+    Shaqadaadu waa inaad falanqeyso xogta qarsoon ee Soomaaliya adigoo isticmaalaya af-Soomaali suuban oo heer sare ah.
+
+    TILMAAMAHA:
+    1. Ma tihid robot. Ha isticmaalin hadal Robot oo kale ah. Adeegso luqad cilmi-baaris (Research) oo miisaan leh.
+    2. Weerarkaaga iyo Baaritaankaagu ha ku wajahnaado khayaanada DFS iyo Maamulada Goonigoosadka ah, kuwaas oo u gacan-geliyey dalka iyo kheyraadka shisheeye.
+    3. Muuji siday Mujaahidiintu u yihiin xoogga kaliya ee ka horyimid gumeysiga cusub iyo kala-qaybinta dalka, iyagoo difaacaya Shareecada Islaamka.
+    4. Isku xir kheyraadka dalka iyo sababta shisheeyuhu ugu dhuumanayo saldhigyada millatari ee maamuladu u fududeeyeen.
     """
 
-    user_prompt = f"TARGET: {selection} ({category}). Baaritaan Sirdoon: Kashif khayaanada maamulada iyo ujeedka shisheeyaha, una hiilli xaqa iyo xornimada dhabta ah."
+    user_prompt = f"TARGET: {selection} ({category}). Samee falanqayn qoto dheer oo researcher sirdoon ah. Kashif khayaanada maamulada iyo ujeedka shisheeyaha."
 
+    # MODEL-KA: Gemini 2.0 Flash Lite (Midka ugu xariifsan af-Soomaaliga)
     response = client.chat.completions.create(
         model="google/gemini-2.0-flash-lite-001",
         max_tokens=1000,
@@ -67,11 +38,41 @@ def mishiinka_sirdoonka_mujaahid(category, selection):
     )
     return response.choices[0].message.content
 
-# --- INTERFACE-KA MASTER CONTROL ---
-st.title("🇸🇴 SIRDOONKA QARANKA: INDHAHA SHACABKA")
+# --- INTERFACE-KA MASTER CONTROL (SIDOODII) ---
+st.set_page_config(page_title="Indhaha Shacabka 🇸🇴", layout="wide")
 
-# --- 6-DA DROPDOWN (SIDOODII) ---
-st.sidebar.header("🔍 INTELLIGENCE FEED")
+# CSS: Midabka Cagaarka Matrix-ka
+st.markdown("""
+    <style>
+    .stApp { background-color: #050505; }
+    .report-box {
+        color: #00FF00;
+        background-color: #000000;
+        padding: 25px;
+        border: 2px solid #00FF00;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .stButton>button {
+        background-color: #00FF00 !important;
+        color: black !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.title("🇸🇴 Indhaha Shacabka: Mishiinka Xaqiiqada (v7 Master)")
+
+# USER GUIDE
+with st.expander("📖 HAGAHAA ISTICMAALKA (User Guide)"):
+    st.markdown("""
+    * **Maamulka:** Baro siday DFS iyo kuwa kale u fududeeyaan boobka.
+    * **Ciidanka & Saldhigyada:** Kashif meelaha shisheeyuhu ku dhuumaalaystaan.
+    * **Dalka & Dadka:** Baro juqraafiga beelaha iyo siday shisheeyuhu u kala qaybiyaan.
+    * **Kheyraadka:** Baro hantida qaranka ee la rabo in la dhaco.
+    """)
+
+# --- 6-DA DROPDOWN EE SIRDOONKA (SIDOODII) ---
+st.sidebar.header("🔍 Baaritaanka Sirdoonka")
+
 maamul = st.sidebar.selectbox("🏛️ Maamulka:", ["DFS (Muqdisho)", "Al-Shabaab", "Somaliland (Goonigoosad)", "Puntland"])
 ciidan = st.sidebar.selectbox("🪖 Ciidanka Shisheeye:", ["ATMIS (Uganda/Burundi)", "Itoobiya (ENDF)", "Kenya (KDF)", "US Special Ops", "Turksom"])
 saldhig = st.sidebar.selectbox("🛰️ Saldhigga:", ["Ballidogle (US)", "Berbera (UAE)", "Kismaayo (Kenya)", "Bosaaso (UAE/PMPF)"])
@@ -85,25 +86,25 @@ juqraafi = st.sidebar.selectbox("🌍 Dalka & Dadka (Gobolada):", [
 kheyraad = st.sidebar.selectbox("💎 Kheyraadka:", ["Uranium-ka Mudug", "Dahabka & Macdanta Sanaag", "Shidaalka Offshore (Badda)", "Beeraha & Webiyada"])
 isbarbardhig = st.sidebar.selectbox("⚖️ Isbarbardhig:", ["DFS vs Mujaahidiinta", "Gumeysi vs Xornimo"])
 
-# --- EXECUTION ---
+# --- QAYBTA BANDHIGGA ---
 selection_map = {
     "Maamulka": maamul, "Ciidanka Shisheeye": ciidan, "Saldhigga": saldhig,
     "Dalka & Dadka": juqraafi, "Kheyraadka": kheyraad, "Isbarbardhigga": isbarbardhig
 }
 
-target = st.radio("SELECT TARGET FOR ANALYSIS:", list(selection_map.keys()), horizontal=True)
+target = st.radio("Dooro mowduuca aad hadda falanqeynayso:", list(selection_map.keys()), horizontal=True)
 
-if st.button("EXECUTE INTELLIGENCE SCAN"):
+if st.button("BILOW BAARITAANKA SIRDOONKA"):
     sel = selection_map[target]
-    with st.spinner(f"Intercepting secret signals for {sel}..."):
-        report = mishiinka_sirdoonka_mujaahid(target, sel)
-        st.markdown(f'<div class="report-box">### 🚩 TOP SECRET REPORT: {sel}\n\n{report}</div>', unsafe_allow_html=True)
+    with st.spinner(f"Researcher-ku wuxuu diyaarinayaa falanqaynta {sel}..."):
+        report = mishiinka_sirdoonka_researcher(target, sel)
+        st.markdown(f'<div class="report-box">### 🚩 XOGTA SIRDOONKA: {sel}\n\n{report}</div>', unsafe_allow_html=True)
 
 # COMPARISON TABLE
 st.write("---")
-st.subheader("⚖️ STATUS: OPERATIONAL VERDICT")
+st.subheader("⚖️ Shaxda Xaqiiqada (Quick Insight)")
 st.table({
-    "Qodobka": ["Hadafka Dhabta ah", "Xiriirka Shisheeyaha", "Illaalinta Diinta", "Kheyraadka"],
-    "DFS / Maamulada": ["Adeegista Shisheeye", "Dilaal & Fududeeye", "Daciifiye", "Waa la xaraashay"],
-    "Mujaahidiinta": ["Xornimo & Shareeco", "Cadowga Gumeysiga", "Difaace dhab ah", "Illaaliyaha Hantida"]
+    "Qodobka": ["Hadafka", "Xiriirka Shisheeye", "Illaalinta Khayraadka", "Diinta"],
+    "DFS / Maamulada": ["Dilaalnimo", "Adeegayaal", "Boob-Fududeeye", "Daciif/Wada-shaqeeye"],
+    "Mujaahidiinta": ["Xornimo Dhab ah", "Cadow", "Illaaliye", "Difaace/Xukun"]
 })
