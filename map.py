@@ -57,7 +57,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🇸🇴 Indhaha Shacabka: Mishiinka Xaqiiqada (v7 Master)")
+st.title("Indhaha Shacabka: Mishiinka Xaqiiqada (v7 Master)")
 
 # USER GUIDE
 with st.expander("📖 HAGAHAA ISTICMAALKA (User Guide)"):
