@@ -1,7 +1,53 @@
 import streamlit as st
 import openai
 
-# --- SECURITY: QARINTA API KEY-GA ---
+# --- CONFIGURATION & GREEN THEME ---
+st.set_page_config(page_title="Indhaha Shacabka 🇸🇴", layout="wide")
+
+# CSS si loogu beddelo muuqaalka mid sirdoon oo cagaar ah
+st.markdown("""
+    <style>
+    /* Midabka guud ee bogga */
+    .stApp {
+        background-color: #050505;
+    }
+    /* Sanduuqa xogta sirdoonka */
+    .report-box {
+        color: #00FF00;
+        background-color: #000000;
+        padding: 25px;
+        border-radius: 5px;
+        border: 2px solid #00FF00;
+        font-family: 'Courier New', Courier, monospace;
+        box-shadow: 0 0 15px #00FF00;
+        line-height: 1.6;
+    }
+    /* Badanka Execute */
+    .stButton>button {
+        background-color: #00FF00 !important;
+        color: black !important;
+        font-weight: bold;
+        border: none;
+        width: 100%;
+    }
+    /* Qoraalka dropdown-ka */
+    .stSelectbox label, .stRadio label {
+        color: #00FF00 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- FUNKSHANKA CODKA (SONAR BEEP) ---
+def play_sonar():
+    # Cod sirdoon oo kooban oo dhacaya marka xogta la keeno
+    audio_html = """
+        <audio autoplay>
+        <source src="https://www.soundjay.com/buttons/beep-01a.mp3" type="audio/mpeg">
+        </audio>
+    """
+    st.markdown(audio_html, unsafe_allow_html=True)
+
+# --- SECURITY: API KEY ---
 try:
     api_key = st.secrets["OPENROUTER_API_KEY"]
 except:
@@ -13,14 +59,17 @@ def mishiinka_sirdoonka_mujaahid(category, selection):
         api_key=api_key
     )
     
+    # SYSTEM PROMPT: Tactical & Aggressive Intel
     system_prompt = """
     Waxaad tahay 'Sirdoonka Mujaahidka ah'. 
-    1. Aragtidaadu: Difaaca Diinta, Midnimada dalka, iyo kashifidda khayaanada DFS iyo gumeysiga cusub.
-    2. Dadka & Dalka: Sharax gobol kasta, beelaha dega, iyo sababta ay shisheeyuhu u degeen aalkaas.
-    3. Isbarbardhig: Muuji farqiga u dhexeeya maamulada dilaaliinta ah (DFS/Goonigoosad) iyo kuwa xornimada raba.
+    Nidaamkaagu maaha sheeko iyo hadal robot. 
+    1. Si toos ah u sheeg 'Muhiimadda Istaraatiijiga ah' ee goobtan/shaygan.
+    2. Kashif 'Khayaanada Qarsoon' ee u dhexaysa DFS iyo Shisheeyaha.
+    3. Ha u hadlin sidii robot, u hadal sidii sarkaal sirdoon oo xog culus dhex jooga.
+    4. Xogtaadu ha noqoto mid midho-dhal ah (Actionable Intel).
     """
 
-    user_prompt = f"Baaritaan qoto dheer ku samee {category}: {selection}. Kashif xogta qarsoon iyo khayaanada dalka lagu hayo."
+    user_prompt = f"TARGET: {selection} ({category}). Baaritaan Sirdoon: Kashif muhiimadda iyo khayaanada."
 
     response = client.chat.completions.create(
         model="google/gemini-2.0-flash-lite-001",
@@ -33,32 +82,13 @@ def mishiinka_sirdoonka_mujaahid(category, selection):
     return response.choices[0].message.content
 
 # --- INTERFACE-KA MASTER CONTROL ---
-st.set_page_config(page_title="Indhaha Shacabka 🇸🇴", layout="wide")
-
-st.title("🇸🇴 Indhaha Shacabka: Mishiinka Xaqiiqada (v7 Master)")
-
-# USER GUIDE
-with st.expander("📖 HAGAHAA ISTICMAALKA (User Guide)"):
-    st.markdown("""
-    * **Maamulka:** Baro siday DFS iyo kuwa kale u fududeeyaan boobka.
-    * **Ciidanka & Saldhigyada:** Kashif meelaha shisheeyuhu ku dhuumaalaystaan.
-    * **Dalka & Dadka:** Baro juqraafiga beelaha iyo siday shisheeyuhu u kala qaybiyaan.
-    * **Kheyraadka:** Baro hantida qaranka ee la rabo in la dhaco.
-    """)
+st.title("🇸🇴 SIRDOONKA QARANKA: INDHAHA SHACABKA")
 
 # --- 6-DA DROPDOWN EE SIRDOONKA (SIDEBAR) ---
-st.sidebar.header("🔍 Baaritaanka Sirdoonka")
-
-# 1. Maamulada
+st.sidebar.header("🔍 INTELLIGENCE FEED")
 maamul = st.sidebar.selectbox("🏛️ Maamulka:", ["DFS (Muqdisho)", "Al-Shabaab", "Somaliland (Goonigoosad)", "Puntland"])
-
-# 2. Ciidamada Shisheeye
 ciidan = st.sidebar.selectbox("🪖 Ciidanka Shisheeye:", ["ATMIS (Uganda/Burundi)", "Itoobiya (ENDF)", "Kenya (KDF)", "US Special Ops", "Turksom"])
-
-# 3. Saldhigyada Shisheeye
 saldhig = st.sidebar.selectbox("🛰️ Saldhigga:", ["Ballidogle (US)", "Berbera (UAE)", "Kismaayo (Kenya)", "Bosaaso (UAE/PMPF)"])
-
-# 4. Dalka & Dadka (Dib-u-habayn lagu sameeyey)
 juqraafi = st.sidebar.selectbox("🌍 Dalka & Dadka (Gobolada):", [
     "Waqooyiga (Awdal, Maroodi-jeex, Togdheer, Sanaag, Sool)",
     "Bari & Woqooyi-Bari (Bari, Nugaal, Mudug)",
@@ -66,11 +96,7 @@ juqraafi = st.sidebar.selectbox("🌍 Dalka & Dadka (Gobolada):", [
     "Koonfurta (Shabeellaha Hoose/Dhexe, Bay, Bakool)",
     "Koonfur-Galbeed/Jubbooyinka (Gedo, Jubbada Hoose/Dhexe)"
 ])
-
-# 5. Kheyraadka Qaranka
 kheyraad = st.sidebar.selectbox("💎 Kheyraadka:", ["Uranium-ka Mudug", "Dahabka & Macdanta Sanaag", "Shidaalka Offshore (Badda)", "Beeraha & Webiyada"])
-
-# 6. Isbarbardhigga Xaqiiqada
 isbarbardhig = st.sidebar.selectbox("⚖️ Isbarbardhig:", ["DFS vs Mujaahidiinta", "Gumeysi vs Xornimo"])
 
 # --- QAYBTA BANDHIGGA ---
@@ -79,17 +105,23 @@ selection_map = {
     "Dalka & Dadka": juqraafi, "Kheyraadka": kheyraad, "Isbarbardhigga": isbarbardhig
 }
 
-target = st.radio("Dooro mowduuca aad hadda falanqeynayso:", list(selection_map.keys()), horizontal=True)
+target = st.radio("SELECT TARGET FOR ANALYSIS:", list(selection_map.keys()), horizontal=True)
 
-if st.button("BILOW BAARITAANKA SIRDOONKA"):
+if st.button("EXECUTE INTELLIGENCE SCAN"):
     sel = selection_map[target]
-    with st.spinner(f"AI-du waxay baaraysaa xogta qarsoon ee {sel}..."):
+    with st.spinner(f"Decoding secret signals for {sel}..."):
         report = mishiinka_sirdoonka_mujaahid(target, sel)
-        st.error(report)
+        play_sonar() # Codka beep-ka
+        st.markdown(f"""
+            <div class="report-box">
+            <h2 style="color: #00FF00; border-bottom: 1px solid #00FF00;">🚩 TOP SECRET REPORT: {sel}</h2>
+            <p>{report}</p>
+            </div>
+        """, unsafe_allow_html=True)
 
 # COMPARISON TABLE
 st.write("---")
-st.subheader("⚖️ Shaxda Xaqiiqada (Quick Insight)")
+st.subheader("⚖️ STATUS: OPERATIONAL VERDICT")
 st.table({
     "Qodobka": ["Hadafka", "Xiriirka Shisheeye", "Illaalinta Khayraadka", "Diinta"],
     "DFS / Maamulada": ["Dilaalnimo", "Adeegayaal", "Boob-Fududeeye", "Daciif/Wada-shaqeeye"],
