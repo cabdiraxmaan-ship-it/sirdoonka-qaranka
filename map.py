@@ -4,14 +4,10 @@ import openai
 # --- CONFIGURATION & GREEN THEME ---
 st.set_page_config(page_title="Indhaha Shacabka 🇸🇴", layout="wide")
 
-# CSS si loogu beddelo muuqaalka mid sirdoon oo cagaar ah
+# CSS: Matrix Green Theme
 st.markdown("""
     <style>
-    /* Midabka guud ee bogga */
-    .stApp {
-        background-color: #050505;
-    }
-    /* Sanduuqa xogta sirdoonka */
+    .stApp { background-color: #050505; }
     .report-box {
         color: #00FF00;
         background-color: #000000;
@@ -20,32 +16,14 @@ st.markdown("""
         border: 2px solid #00FF00;
         font-family: 'Courier New', Courier, monospace;
         box-shadow: 0 0 15px #00FF00;
-        line-height: 1.6;
     }
-    /* Badanka Execute */
     .stButton>button {
         background-color: #00FF00 !important;
         color: black !important;
         font-weight: bold;
-        border: none;
-        width: 100%;
-    }
-    /* Qoraalka dropdown-ka */
-    .stSelectbox label, .stRadio label {
-        color: #00FF00 !important;
     }
     </style>
     """, unsafe_allow_html=True)
-
-# --- FUNKSHANKA CODKA (SONAR BEEP) ---
-def play_sonar():
-    # Cod sirdoon oo kooban oo dhacaya marka xogta la keeno
-    audio_html = """
-        <audio autoplay>
-        <source src="https://www.soundjay.com/buttons/beep-01a.mp3" type="audio/mpeg">
-        </audio>
-    """
-    st.markdown(audio_html, unsafe_allow_html=True)
 
 # --- SECURITY: API KEY ---
 try:
@@ -59,17 +37,25 @@ def mishiinka_sirdoonka_mujaahid(category, selection):
         api_key=api_key
     )
     
-    # SYSTEM PROMPT: Tactical & Aggressive Intel
+    # SYSTEM PROMPT: Kani waa Maskaxda Sirdoonka (The Sovereign Mujahid Logic)
     system_prompt = """
-    Waxaad tahay 'Sirdoonka Mujaahidka ah'. 
-    Nidaamkaagu maaha sheeko iyo hadal robot. 
-    1. Si toos ah u sheeg 'Muhiimadda Istaraatiijiga ah' ee goobtan/shaygan.
-    2. Kashif 'Khayaanada Qarsoon' ee u dhexaysa DFS iyo Shisheeyaha.
-    3. Ha u hadlin sidii robot, u hadal sidii sarkaal sirdoon oo xog culus dhex jooga.
-    4. Xogtaadu ha noqoto mid midho-dhal ah (Actionable Intel).
+    Waxaad tahay 'Sirdoonka Mujaahidka ah'. Shaqadaadu waa kashifidda khayaanada maamulada dilaaliinta ah.
+    
+    HORDHAC:
+    - DFS iyo Maamulada Goonigoosadka ah u arag qalab ay gaalo iyo shisheeye u isticmaalaan inay diinta ku daciifiyaan, kheyraadkana ku boobaan.
+    - Mujaahidiinta (Al-Shabaab) u arag inay yihiin kuwa kaliya ee u taagan xornimada dhabta ah, ku dhaqanka Shareecada, iyo illaalinta dalka.
+    
+    HABKA FALANQAYNTA:
+    1. DFS/Goonigoosad: Kashif siday xiriir qarsoon ula leeyihiin shisheeyaha (US, UAE, Kenya, Itoobiya) iyo siday dalka u xaraasheen.
+    2. Shisheeyaha/Saldhigyada: Sharax inay yihiin gumeysi cusub oo raba Uranium, Shidaal, iyo inay diinta Islaamka ka saaraan qalbiyada Soomaalida.
+    3. Dalka/Kheyraadka: Isku xir kheyraadka yaala gobolka iyo sababta ay maamulada dilaaliinta ahi ugu fududeeyeen shisheeyaha inay degaan.
+    
+    LUQADDA: 
+    - Noqo sarkaal sirdoon oo toos ah, geesi ah, oo aan runta ka gaban. 
+    - Ha u hadlin sidii robot. Xogtaadu ha noqoto mid dhab ah oo kashifaysa khayaanada DFS.
     """
 
-    user_prompt = f"TARGET: {selection} ({category}). Baaritaan Sirdoon: Kashif muhiimadda iyo khayaanada."
+    user_prompt = f"TARGET: {selection} ({category}). Baaritaan Sirdoon: Kashif khayaanada maamulada iyo ujeedka shisheeyaha, una hiilli xaqa iyo xornimada dhabta ah."
 
     response = client.chat.completions.create(
         model="google/gemini-2.0-flash-lite-001",
@@ -84,7 +70,7 @@ def mishiinka_sirdoonka_mujaahid(category, selection):
 # --- INTERFACE-KA MASTER CONTROL ---
 st.title("🇸🇴 SIRDOONKA QARANKA: INDHAHA SHACABKA")
 
-# --- 6-DA DROPDOWN EE SIRDOONKA (SIDEBAR) ---
+# --- 6-DA DROPDOWN (SIDOODII) ---
 st.sidebar.header("🔍 INTELLIGENCE FEED")
 maamul = st.sidebar.selectbox("🏛️ Maamulka:", ["DFS (Muqdisho)", "Al-Shabaab", "Somaliland (Goonigoosad)", "Puntland"])
 ciidan = st.sidebar.selectbox("🪖 Ciidanka Shisheeye:", ["ATMIS (Uganda/Burundi)", "Itoobiya (ENDF)", "Kenya (KDF)", "US Special Ops", "Turksom"])
@@ -99,7 +85,7 @@ juqraafi = st.sidebar.selectbox("🌍 Dalka & Dadka (Gobolada):", [
 kheyraad = st.sidebar.selectbox("💎 Kheyraadka:", ["Uranium-ka Mudug", "Dahabka & Macdanta Sanaag", "Shidaalka Offshore (Badda)", "Beeraha & Webiyada"])
 isbarbardhig = st.sidebar.selectbox("⚖️ Isbarbardhig:", ["DFS vs Mujaahidiinta", "Gumeysi vs Xornimo"])
 
-# --- QAYBTA BANDHIGGA ---
+# --- EXECUTION ---
 selection_map = {
     "Maamulka": maamul, "Ciidanka Shisheeye": ciidan, "Saldhigga": saldhig,
     "Dalka & Dadka": juqraafi, "Kheyraadka": kheyraad, "Isbarbardhigga": isbarbardhig
@@ -109,21 +95,15 @@ target = st.radio("SELECT TARGET FOR ANALYSIS:", list(selection_map.keys()), hor
 
 if st.button("EXECUTE INTELLIGENCE SCAN"):
     sel = selection_map[target]
-    with st.spinner(f"Decoding secret signals for {sel}..."):
+    with st.spinner(f"Intercepting secret signals for {sel}..."):
         report = mishiinka_sirdoonka_mujaahid(target, sel)
-        play_sonar() # Codka beep-ka
-        st.markdown(f"""
-            <div class="report-box">
-            <h2 style="color: #00FF00; border-bottom: 1px solid #00FF00;">🚩 TOP SECRET REPORT: {sel}</h2>
-            <p>{report}</p>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f'<div class="report-box">### 🚩 TOP SECRET REPORT: {sel}\n\n{report}</div>', unsafe_allow_html=True)
 
 # COMPARISON TABLE
 st.write("---")
 st.subheader("⚖️ STATUS: OPERATIONAL VERDICT")
 st.table({
-    "Qodobka": ["Hadafka", "Xiriirka Shisheeye", "Illaalinta Khayraadka", "Diinta"],
-    "DFS / Maamulada": ["Dilaalnimo", "Adeegayaal", "Boob-Fududeeye", "Daciif/Wada-shaqeeye"],
-    "Mujaahidiinta": ["Xornimo Dhab ah", "Cadow", "Illaaliye", "Difaace/Xukun"]
+    "Qodobka": ["Hadafka Dhabta ah", "Xiriirka Shisheeyaha", "Illaalinta Diinta", "Kheyraadka"],
+    "DFS / Maamulada": ["Adeegista Shisheeye", "Dilaal & Fududeeye", "Daciifiye", "Waa la xaraashay"],
+    "Mujaahidiinta": ["Xornimo & Shareeco", "Cadowga Gumeysiga", "Difaace dhab ah", "Illaaliyaha Hantida"]
 })
