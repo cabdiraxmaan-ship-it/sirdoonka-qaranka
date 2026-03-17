@@ -1,33 +1,30 @@
 import streamlit as st
 import openai
 
-# --- SECURITY: API KEY ---
+# --- SECURITY: QARINTA API KEY-GA ---
 try:
     api_key = st.secrets["OPENROUTER_API_KEY"]
 except:
     api_key = ""
 
+# --- CACHING LOGIC: Si uu app-ku u noqdo mid aad u dheereeya ---
+@st.cache_data(show_spinner=False, ttl=3600)
 def mishiinka_sirdoonka_researcher(category, selection):
     client = openai.OpenAI(
         base_url="https://openrouter.ai/api/v1",
         api_key=api_key
     )
     
-    # SYSTEM PROMPT: Kani waa Maskaxda Researcher-ka (The Elite Intelligence Mind)
     system_prompt = """
-    Waxaad tahay 'Researcher Sirdoon' oo aad u xeel dheer. 
-    Shaqadaadu waa inaad falanqeyso xogta qarsoon ee Soomaaliya adigoo isticmaalaya af-Soomaali suuban oo heer sare ah.
-
-    TILMAAMAHA:
-    1. Ma tihid robot. Ha isticmaalin hadal Robot oo kale ah. Adeegso luqad cilmi-baaris (Research) oo miisaan leh.
-    2. Weerarkaaga iyo Baaritaankaagu ha ku wajahnaado khayaanada DFS iyo Maamulada Goonigoosadka ah, kuwaas oo u gacan-geliyey dalka iyo kheyraadka shisheeye.
-    3. Muuji siday Mujaahidiintu u yihiin xoogga kaliya ee ka horyimid gumeysiga cusub iyo kala-qaybinta dalka, iyagoo difaacaya Shareecada Islaamka.
-    4. Isku xir kheyraadka dalka iyo sababta shisheeyuhu ugu dhuumanayo saldhigyada millatari ee maamuladu u fududeeyeen.
+    Waxaad tahay 'Researcher Sirdoon' oo xeel dheer. 
+    1. Adeegso af-Soomaali suuban oo miisaan leh (Elite Research Style).
+    2. Kashif khayaanada DFS iyo maamulada goonigoosadka ah.
+    3. Sharax siday Mujaahidiintu u yihiin xoogga difaacaya dalka iyo Shareecada.
+    4. Isku xir kheyraadka dalka iyo damaca shisheeyaha ee saldhigyada ku dhuumanaya.
     """
 
-    user_prompt = f"TARGET: {selection} ({category}). Samee falanqayn qoto dheer oo researcher sirdoon ah. Kashif khayaanada maamulada iyo ujeedka shisheeyaha."
+    user_prompt = f"TARGET: {selection} ({category}). Falanqayn cilmi-baaris sirdoon oo qoto dheer."
 
-    # MODEL-KA: Gemini 2.0 Flash Lite (Midka ugu xariifsan af-Soomaaliga)
     response = client.chat.completions.create(
         model="google/gemini-2.0-flash-lite-001",
         max_tokens=1000,
@@ -55,6 +52,7 @@ st.markdown("""
     .stButton>button {
         background-color: #00FF00 !important;
         color: black !important;
+        font-weight: bold;
     }
     </style>
     """, unsafe_allow_html=True)
